@@ -26,7 +26,7 @@ __global__ void stencil_1d(int n, double *in, double *out)
 /* calculate global index in the array */
 /* insert code to calculate global index in the array using block
    and thread built-in variables */
-  int globalIndex = FIXME
+  int globalIndex = threadIdx.x + blockIdx.x * blockDim.x;
 	
 /* return if my global index is larger than the array size */
   if( globalIndex >= n ) return;
@@ -44,7 +44,7 @@ __global__ void stencil_1d(int n, double *in, double *out)
   {
 /* add the required elements from the array "in" to the temporary 
    variable "result */
-    result += FIXME
+    result += in[i];
   }
 
   out[globalIndex] = result;
@@ -91,7 +91,7 @@ int main()
 
   dim3 threads( THREADS_PER_BLOCK, 1, 1);
 /* insert code for proper number of blocks in X dimension */
-  dim3 blocks( FIXME, 1, 1);
+  dim3 blocks( N / THREADS_PER_BLOCK + 1, 1, 1);
 
 /* start the timers */
 

@@ -17,9 +17,9 @@
 #include <stdio.h>
 #include "../debug.h"
 
-#define N ( 1024 * 1024 )
-#define RADIUS 5
-#define THREADS_PER_BLOCK 32
+#define N ( 1024 * 1024 *2*2 )
+#define RADIUS 7
+#define THREADS_PER_BLOCK 512
 
 /* stencil kernel */
 
@@ -56,7 +56,7 @@ __global__ void stencil_1d(int n, double *in, double *out)
     out[globalIndex] = (double) globalIndex * ( (double)RADIUS*2 + 1) ;
     return;
   } /* end if */
-
+  __syncthreads();
   double result = 0.0;
 
   for( int i = -(RADIUS); i <= (RADIUS); i++ ) 

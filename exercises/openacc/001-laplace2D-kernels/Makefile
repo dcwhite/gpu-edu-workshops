@@ -16,7 +16,7 @@
 
 CC       = pgcc
 CCFLAGS  = -tp sandybridge-64
-ACCFLAGS = FIXME# add OpenACC compiler options here
+ACCFLAGS = -acc -ta=nvidia -Minfo=accel #FIXME# add OpenACC compiler options here
 OMPFLAGS = -fast -mp -Minfo
 
 BIN =  laplace2d_omp laplace2d_acc

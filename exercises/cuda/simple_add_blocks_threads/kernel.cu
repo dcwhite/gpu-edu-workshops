@@ -17,10 +17,11 @@
 #include <stdio.h>
 #include "../debug.h"
 
-__global__ void add(int *a, int *b, int *c)
+__global__ void add(int n, int *a, int *b, int *c)
 {
   int index = threadIdx.x + blockIdx.x * blockDim.x;
-  c[index] = a[index] + b[index];
+  if (index < n)  
+    c[index] = a[index] + b[index];
 }
 
 #define N (2048*2048)
@@ -65,7 +66,8 @@ int main()
 
 /* launch the kernel on the GPU */
 /* insert the launch parameters to launch properly using blocks and threads */
-  add<<< FIXME, FIXME >>>( d_a, d_b, d_c );
+  int numBlocks = N / THREADS_PER_BLOCK + 1; 
+  add<<< numBlocks, THREADS_PER_BLOCK >>>(N, d_a, d_b, d_c );
   checkKERNEL()
 
 /* copy result back to host */

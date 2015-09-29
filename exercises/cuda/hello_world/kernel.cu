@@ -23,7 +23,8 @@ __global__ void mykernel(){
 
 int main(void) 
 {
-  mykernel<<<1,1>>>();
+  dim3 q(2,3);
+  mykernel<<<1,q>>>();
   checkKERNEL()
   printf("Hello World from Host\n");
   return 0;

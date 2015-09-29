@@ -20,7 +20,7 @@
 __global__ void add(int *a, int *b, int *c)
 {
 /* insert correct index so each element is calculated by a different thread */
-  c[FIXME] = a[FIXME] + b[FIXME];
+  c[threadIdx.x] = a[threadIdx.x] + b[threadIdx.x];
 }
 
 /* experiment with different values for N */
@@ -66,7 +66,7 @@ int main()
 
 /* launch the kernel on the GPU */
 /* insert correct launch parameters to use 1 block and N threads */
-  add<<< FIXME, FIXME >>>( d_a, d_b, d_c );
+  add<<< 1, N >>>( d_a, d_b, d_c );
   checkKERNEL()
 
 /* copy result back to host */

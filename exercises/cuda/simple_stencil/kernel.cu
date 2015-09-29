@@ -17,9 +17,9 @@
 #include <stdio.h>
 #include "../debug.h"
 
-#define N ( 1024 * 1024 )
-#define RADIUS 5
-#define THREADS_PER_BLOCK 512
+#define N ( 1024 * 1024 * 2 * 2 )
+#define RADIUS 7
+#define THREADS_PER_BLOCK 256
 
 __global__ void stencil_1d(int n, double *in, double *out)
 {

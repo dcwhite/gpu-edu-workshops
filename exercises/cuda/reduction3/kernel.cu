@@ -38,22 +38,23 @@ __global__ void sumReduction(int n, FLOATTYPE_T *in, FLOATTYPE_T *out)
  * Loop over the grid stride so that each thread adds up its relevant 
  * elements of the array and saves them to SMEM
  */
-
+  //__syncthreads();
   for( int i = globalIndex; i < n; i += blockDim.x * gridDim.x )
   {
-    sArray[threadIdx.x] += FIXME;
+    sArray[threadIdx.x] += in[i];
   } /* end for */
-  
+  __syncthreads();
 
 /* do the final reduction in SMEM */
-  for( int i = 1; i < blockDim.x; i = FIXME )
+  for( int i = 1; i < blockDim.x; i = 2*i  )
   {
-    if( threadIdx.x % (FIXME) == 0 )
+    if( threadIdx.x % (2*i) == 0 )
     {
-      sArray[FIXME] += sArray[FIXME];
+      sArray[threadIdx.x] += sArray[threadIdx.x + i];
     } /* end if */
-
+   __syncthreads();
   } /* end for */
+//  __syncthreads();
 
 /* thread0 writes the thread block reduced value back to global memory */
   if( threadIdx.x == 0 ) out[blockIdx.x] = sArray[0]; 
@@ -122,9 +123,9 @@ int main()
 
 /* launch the kernel on the GPU */
 
-  sumReduction<<< blocks, FIXME >>>( size, d_in,  d_tempArray );
+  sumReduction<<< blocks, threads1 >>>( size, d_in,  d_tempArray );
   checkKERNEL()
-  sumReduction<<<      1, FIXME >>>( blocks.x, d_tempArray, d_sum );
+  sumReduction<<<      1, threads2 >>>( blocks.x, d_tempArray, d_sum );
   checkKERNEL()
 
 /* stop the timers */

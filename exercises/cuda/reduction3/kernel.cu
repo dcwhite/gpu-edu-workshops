@@ -38,7 +38,6 @@ __global__ void sumReduction(int n, FLOATTYPE_T *in, FLOATTYPE_T *out)
  * Loop over the grid stride so that each thread adds up its relevant 
  * elements of the array and saves them to SMEM
  */
-  //__syncthreads();
   for( int i = globalIndex; i < n; i += blockDim.x * gridDim.x )
   {
     sArray[threadIdx.x] += in[i];
@@ -54,7 +53,6 @@ __global__ void sumReduction(int n, FLOATTYPE_T *in, FLOATTYPE_T *out)
     } /* end if */
    __syncthreads();
   } /* end for */
-//  __syncthreads();
 
 /* thread0 writes the thread block reduced value back to global memory */
   if( threadIdx.x == 0 ) out[blockIdx.x] = sArray[0]; 

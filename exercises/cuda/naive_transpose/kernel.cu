@@ -36,12 +36,12 @@ __global__ void naive_cuda_transpose( const int m,
                                       const double * const a, 
                                       double * const c )
 {
-  const int myRow = FIXME
-  const int myCol = FIXME
+  const int myRow = threadIdx.x + blockDim.x * blockIdx.x;
+  const int myCol = threadIdx.y + blockDim.y * blockIdx.y;
 
   if( myRow < m && myCol < m )
   {
-    c[FIXME] = a[FIXME];
+    c[INDX(myCol, myRow, m)] = a[INDX(myRow, myCol, m)];
   } /* end if */
   return;
 
@@ -153,7 +153,7 @@ int main( int argc, char *argv[] )
 /* setup threadblock size and grid sizes */
 
   dim3 threads( THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y, 1 );
-  dim3 blocks( FIXME, FIXME, 1 );
+  dim3 blocks( size / THREADS_PER_BLOCK_X + 1, size / THREADS_PER_BLOCK_Y + 1, 1 );
 
 /* start timers */
   checkCUDA( cudaEventRecord( start, 0 ) );

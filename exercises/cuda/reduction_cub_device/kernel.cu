@@ -62,7 +62,7 @@ int main()
 /* initialize the CUB temp storage */
   void *d_temp_storage = NULL;
   size_t temp_storage_bytes = 0;
-  cub::DeviceReduce::Sum( FIXME );
+  cub::DeviceReduce::Sum( d_temp_storage, temp_storage_bytes, d_in, d_out, size );
 
   printf("temp storage is %ld\n", temp_storage_bytes );
 
@@ -76,8 +76,7 @@ int main()
   checkCUDA( cudaEventRecord( start, 0 ) );
 
 /* launch the kernel on the GPU */
-  cub::DeviceReduce::Sum( FIXME );
-
+  cub::DeviceReduce::Sum( d_temp_storage, temp_storage_bytes, d_in, d_out, size );
 /* stop the timers */
 
   checkCUDA( cudaEventRecord( stop, 0 ) );

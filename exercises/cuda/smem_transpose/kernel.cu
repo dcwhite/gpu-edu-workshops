@@ -40,7 +40,7 @@ __global__ void smem_cuda_transpose( const int m,
 	
 /* declare a shared memory array */
 
-  __shared__ double smemArray[FIXME][FIXME];
+  __shared__ double smemArray[THREADS_PER_BLOCK_X][THREADS_PER_BLOCK_Y+1];
 	
 /* determine my row and column indices for the error checking code */
 
@@ -49,8 +49,8 @@ __global__ void smem_cuda_transpose( const int m,
 
 /* determine my row tile and column tile index */
 
-  const int tileX = FIXME
-  const int tileY = FIXME
+  const int tileX = blockIdx.x * blockDim.x;
+  const int tileY = blockIdx.y * blockDim.y;
 
   if( myRow < m && myCol < m )
   {
@@ -59,16 +59,16 @@ __global__ void smem_cuda_transpose( const int m,
 /* your INDX calculation for both a[] and c[].  This will ensure proper */
 /* coalescing. */
 
-   smemArray[FIXME][FIXME] = 
-      a[FIXME];
+   smemArray[threadIdx.x][threadIdx.y] = 
+      a[INDX(myRow,myCol,m)];
   } /* end if */
-
+  __syncthreads();
 		
   if( myRow < m && myCol < m )
   {
 /* write the result */
-    c[FIXME] = 
-           smemArray[FIXME][FIXME];
+    c[INDX(tileY + threadIdx.x, tileX + threadIdx.y, m)] = 
+           smemArray[threadIdx.y][threadIdx.x];
   } /* end if */
   return;
 

@@ -290,7 +290,7 @@ int main( int argc, char *argv[] )
                             tileSize * tileSize;
 /* use cudaMemcpyAsync to move a tile of C to the device
    HINT: cOffset points to the starting location of the tile, in host mem */
-	checkCUDA( cudaMemcpyAsync( d_c[i] , &p_c[i] + cOffset, tileSize, cudaMemcpyDeviceToHost, stream[i]) ); 
+        FIXME
       } /* end for */
 
 
@@ -308,7 +308,7 @@ int main( int argc, char *argv[] )
                             tileSize * tileSize;
 /* use cudaMemcpyAsync to move a tile of A to the device
    HINT: aOffset points to the starting location of the tile, in host mem */
-          checkCUDA( cudaMemcpyAsync( d_a[i], h_a + aOffset, tileSize, cudaMemcpyHostToDevice, stream[i]) );
+        FIXME
         } /* end for */
 
 /* stream B into device */
@@ -317,9 +317,10 @@ int main( int argc, char *argv[] )
         {
         int bOffset = INDX( k, colTile[i], linearTiles ) *
                             tileSize * tileSize;
-/* use cudaMemcpyAsync to move a tile of B to the device
+/* use cudaMemcpyAsync to move a tile of A to the device
    HINT: bOffset points to the starting location of the tile, in host mem */
-  checkCUDA( cudaMemcpyAsync( d_b[i], h_b + bOffset, tileSize, cudaMemcpyHostToDevice, stream[i]) );
+        FIXME
+
         } /* end for */
 
 /* do the gemm */
@@ -328,13 +329,11 @@ int main( int argc, char *argv[] )
         {
 /* set the stream for the cublas call */
 
-          checkCUBLAS( cublasSetStream(handle, stream[i]) );
+          FIXME
 
 /* call the cublas gemm function */
-         
-          checkCUBLAS( cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, 
-		tileSize, tileSize, tileSize,
-                &alpha, d_a[i], tileSize, d_b[i], tileSize, &beta, d_c[i], tileSize) ); 
+
+          FIXME
 
         } /* end for */
 
@@ -348,7 +347,7 @@ int main( int argc, char *argv[] )
                             tileSize * tileSize;
 /* use cudaMemcpyAsync to move a tile of C to the host
    HINT: cOffset points to the starting location of the tile, in host mem */
-        checkCUDA( cudaMemcpyAsync(&p_c[i] + cOffset, d_c[i], tileSize, cudaMemcpyDeviceToHost, stream[i]) );
+        FIXME
       } /* end for */
 
 
